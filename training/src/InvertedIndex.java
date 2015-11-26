@@ -80,10 +80,6 @@ public class InvertedIndex extends Configured implements Tool {
     			lastid = value.toString().replace(".txt", "");
     			stringBuilder.append("("+ lastid +")");
     		}
-    		
-    		if (values.iterator().hasNext()) {
-    			stringBuilder.append(" ");
-    		}
     	}
     	
     	context.write(word, new Text(stringBuilder.toString()));

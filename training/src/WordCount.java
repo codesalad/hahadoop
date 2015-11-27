@@ -45,6 +45,7 @@ public class WordCount extends Configured implements Tool {
     private long numRecords = 0;    
     private static final Pattern WORD_BOUNDARY = Pattern.compile("\\s*\\b\\s*");
     
+	// This is to filter out the unwanted 'words' 
     private static final Pattern FILTER = Pattern.compile("([A-Z][a-z]+)|([a-z]\\w+)");
 
     public void map(LongWritable offset, Text lineText, Context context)
@@ -56,6 +57,7 @@ public class WordCount extends Configured implements Tool {
             continue;
         } 
         
+		// If a word doens't contain special characters, emite key,value
         Matcher nospecials = FILTER.matcher(word);
         if (nospecials.find()) {
         	currentWord = new Text(word);

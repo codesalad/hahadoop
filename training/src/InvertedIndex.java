@@ -57,7 +57,10 @@ public class InvertedIndex extends Configured implements Tool {
             continue;
         } 
         
+		// get the filename as a string
         String filenameStr = ((FileSplit) context.getInputSplit()).getPath().getName();
+		
+		// create a text object of the filename.
         filename = new Text(filenameStr);
         
         Matcher nospecials = FILTER.matcher(word);
@@ -75,6 +78,9 @@ public class InvertedIndex extends Configured implements Tool {
         throws IOException, InterruptedException {
     	StringBuilder stringBuilder = new StringBuilder();
     	String lastid = "";
+		
+		// loop through values which are filenames
+		// store the last id in case  we have duplicates
     	for (Text value : values) {
     		if (!lastid.equals(value.toString().replace(".txt", ""))) {
     			lastid = value.toString().replace(".txt", "");

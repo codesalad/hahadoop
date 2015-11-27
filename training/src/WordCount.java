@@ -16,6 +16,10 @@ import org.apache.hadoop.io.Text;
 
 import org.apache.log4j.Logger;
 
+/**
+* Author: Wing Nguyen 2015
+* 4287118
+*/
 public class WordCount extends Configured implements Tool {
 
   private static final Logger LOG = Logger.getLogger(WordCount.class);

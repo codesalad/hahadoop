@@ -16,6 +16,10 @@ import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 
 import org.apache.log4j.Logger;
 
+/**
+* Author: Wing Nguyen
+* 4287118
+*/
 public class InvertedIndex extends Configured implements Tool {
 
   private static final Logger LOG = Logger.getLogger(InvertedIndex.class);

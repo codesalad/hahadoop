@@ -1,4 +1,7 @@
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.hadoop.conf.Configured;
@@ -86,6 +89,8 @@ public class WordCount extends Configured implements Tool {
 	}
 
 	public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {
+		private int TOP = 5;
+		private TreeMap<Integer, String> topWordsFrequencies = new TreeMap<>(Collections.reverseOrder());
 		
 		@Override
 		public void setup(Context context) throws IOException {
@@ -109,7 +114,11 @@ public class WordCount extends Configured implements Tool {
 				// Count words with sum < 5
 				if (sum < 5)
 					context.getCounter(Records.TERMS_LT5).increment(1);
-
+				
+				topWordsFrequencies.put(sum, word.toString());
+				if (topWordsFrequencies.size() > TOP)
+					topWordsFrequencies.pollLastEntry();
+					
 				context.getCounter(Records.UNIQUE_TERMS).increment(1);
 				context.write(word, new IntWritable(sum));	
 			} else {
@@ -120,7 +129,11 @@ public class WordCount extends Configured implements Tool {
 		
 		@Override
 		public void cleanup(Context context) throws IOException, InterruptedException {
-			// Might be handy for later.
+			// Print words and frequencies from the topWordsFrequencies list.
+			for (Entry<Integer, String> sumWords : topWordsFrequencies.entrySet()) {
+				Text test = new Text(">>" + sumWords.getValue());
+				context.write(test, new IntWritable(sumWords.getKey()));
+			}
 		}
 	}
 

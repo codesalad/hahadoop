@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
@@ -22,6 +24,8 @@ import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
 
 public class StopWordCount extends Configured implements Tool {
+	
+	private static final String STOPWORDS = "(the)|(of)|(and)";
 
 	private static final Logger LOG = Logger.getLogger(StopWordCount.class);
 
@@ -39,17 +43,17 @@ public class StopWordCount extends Configured implements Tool {
 		job.setMapperClass(Map.class);
 		job.setCombinerClass(Combine.class);
 		job.setReducerClass(Reduce.class);
-		job.setOutputKeyClass(Pair.class);
+		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
 		return job.waitForCompletion(true) ? 0 : 1;
 	}
 
-	public static class Map extends Mapper<LongWritable, Text, Pair<String, String>, IntWritable> {
+	public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {
 		private final static IntWritable one = new IntWritable(1);
 		private String lastWord = "";
 		private static final Pattern WORD_BOUNDARY = Pattern.compile("\\s*\\b\\s*");
 
-		private static final Pattern FILTER = Pattern.compile("([A-Z][a-z]+)|([a-z]\\w+)");
+		private static final Pattern FILTER = Pattern.compile("([A-Za-z]+)");
 
 		public void map(LongWritable offset, Text lineText, Context context)
 				throws IOException, InterruptedException {
@@ -62,56 +66,63 @@ public class StopWordCount extends Configured implements Tool {
 				// Filter out special signs
 				Matcher nospecials = FILTER.matcher(word);
 				if (nospecials.find()) {
-					
-					if (lastWord.matches("(the)|(of)|(and)")) {
-						Pair<String, String> pair = new Pair<String, String>(lastWord, word);
-						context.write(pair, one);
+					if (lastWord.matches(STOPWORDS)) {
+						Text pairKey = new Text(lastWord + " " + word.toString());						
+						context.write(pairKey, one);
 					}
-					
 					lastWord = word;
 				}
 			}
 		}
 	}
 
-	public static class Reduce extends Reducer<Pair<String, String>, IntWritable, Text, IntWritable> {
+	public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {
 		private int TOP = 5;
-		private TreeMap<Integer, Pair<String, String>> topWordsFrequencies = new TreeMap<>(Collections.reverseOrder());
+		
+		private TreeMap<String, TreeMap<Integer, String>> stopWordRanks = new TreeMap<>(Collections.reverseOrder());
 		
 		@Override
 		public void setup(Context context) throws IOException {
-			// Might be handy for later.
+
 		}
 		
 		@Override
-		public void reduce(Pair<String, String> words, Iterable<IntWritable> counts, Context context)
+		public void reduce(Text wordPair, Iterable<IntWritable> counts, Context context)
 				throws IOException, InterruptedException {
 			
 			int sum = 0;
 			for (IntWritable count : counts) {
 				sum += count.get();
 			}
-
-			topWordsFrequencies.put(sum, words);
-			if (topWordsFrequencies.size() > TOP)
-				topWordsFrequencies.pollLastEntry();
+			
+			String stopwordKey = wordPair.toString().split(" ")[0];
+			if (!stopWordRanks.containsKey(stopwordKey)) {
+				TreeMap<Integer, String> top = new TreeMap<>(Collections.reverseOrder());
+				stopWordRanks.put(stopwordKey, top);
+			}
+			
+			stopWordRanks.get(stopwordKey).put(sum, wordPair.toString());
+			if (stopWordRanks.get(stopwordKey).size() > TOP)
+				stopWordRanks.get(stopwordKey).pollLastEntry();
+			
 		}
 		
 		@Override
 		public void cleanup(Context context) throws IOException, InterruptedException {
-			// Print words and frequencies from the topWordsFrequencies list.
-			for (Entry<Integer, Pair<String, String>> sumPairs : topWordsFrequencies.entrySet()) {
-				Text test = new Text(sumPairs.getValue().getFirst() + " " + sumPairs.getValue().getSecond());
-				context.write(test, new IntWritable(sumPairs.getKey()));
+			for (Entry<String, TreeMap<Integer, String>> stopword : stopWordRanks.entrySet()) {
+				TreeMap<Integer, String> ranglist = stopword.getValue();
+				for (Entry<Integer, String> sumPairs : ranglist.entrySet()) {
+					Text outText = new Text(sumPairs.getValue());
+					context.write(outText, new IntWritable(sumPairs.getKey()));
+				}
 			}
 		}
 	}
 
-	public static class Combine extends Reducer<Pair<String, String>, IntWritable, Pair<String, String>, IntWritable> {
+	public static class Combine extends Reducer<Text, IntWritable, Text, IntWritable> {
 		@Override
-		public void reduce(Pair<String, String> words, Iterable<IntWritable> counts, Context context)
+		public void reduce(Text words, Iterable<IntWritable> counts, Context context)
 				throws IOException, InterruptedException {
-			
 			int sum = 0;
 			for (IntWritable count : counts) {
 				sum += count.get();

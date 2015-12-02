@@ -51,7 +51,7 @@ public class OneFileCounter extends Configured implements Tool {
 		private long numRecords = 0;    
 		private static final Pattern WORD_BOUNDARY = Pattern.compile("\\s*\\b\\s*");
 
-		private static final Pattern FILTER = Pattern.compile("([A-Z][a-z]+)|([a-z]\\w+)");
+		private static final Pattern FILTER = Pattern.compile("([A-Za-z]+)");
 
 		public void map(LongWritable offset, Text lineText, Context context)
 				throws IOException, InterruptedException {

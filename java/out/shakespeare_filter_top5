@@ -1,4 +1,5 @@
 3rd	1
+a	1589
 abandon	1
 abate	2
 abatements	1
@@ -505,6 +506,7 @@ aye	1
 aym	1
 ayme	1
 ayre	4
+b	7
 babe	2
 babes	1
 baboone	1
@@ -1050,6 +1052,7 @@ buzz	2
 buzzers	1
 by	421
 byte	2
+c	14
 cabin	1
 cable	1
 cables	1
@@ -1859,6 +1862,7 @@ cyclops	1
 cynders	1
 cynthia	1
 cyprus	23
+d	814
 dafts	1
 dagger	9
 daggers	2
@@ -2473,6 +2477,7 @@ dyes	1
 dyest	1
 dyet	1
 dying	2
+e	43
 each	29
 eager	2
 eagle	1
@@ -2843,6 +2848,7 @@ eyeless	1
 eyelids	1
 eyes	62
 eyesight	2
+f	11
 fa	2
 fable	1
 face	41
@@ -3293,6 +3299,7 @@ fustian	1
 future	6
 futurity	1
 fye	1
+g	2
 gadding	1
 gaged	1
 gain	4
@@ -3985,6 +3992,7 @@ hypocrisie	1
 hypocrite	1
 hypocrites	1
 hyrcanian	1
+i	2179
 ia	5
 iag	4
 iago	341
@@ -4413,6 +4421,7 @@ knowledge	3
 known	13
 knowne	10
 knows	6
+l	9
 la	1
 label	1
 labour	7
@@ -4763,6 +4772,7 @@ lyes	5
 lyest	1
 lying	2
 lyon	1
+m	3
 mab	3
 mac	2
 machine	5
@@ -5235,6 +5245,7 @@ myne	1
 myself	27
 myselfe	1
 mystery	3
+n	7
 naked	7
 nam	1
 name	51
@@ -5399,6 +5410,7 @@ nurse	150
 nuts	1
 nutshell	1
 nymph	1
+o	377
 oake	2
 oath	4
 oaths	1
@@ -5577,6 +5589,7 @@ own	57
 owne	29
 owner	6
 owns	4
+p	11
 pace	3
 pacing	1
 pack	2
@@ -6356,6 +6369,7 @@ quote	1
 quoted	1
 quoth	6
 quyet	1
+r	13
 rabble	1
 race	1
 rack	1
@@ -6776,6 +6790,7 @@ russet	1
 rust	1
 rusty	1
 ry	2
+s	770
 sable	2
 sables	2
 sack	1
@@ -7864,6 +7879,7 @@ sympathy	1
 synod	1
 synonymous	1
 syrrups	1
+t	212
 ta	5
 table	7
 tables	3
@@ -8329,6 +8345,7 @@ tyrannically	1
 tyrannous	3
 tyrant	3
 tyre	1
+u	5
 ubique	1
 ugly	1
 ulcer	1
@@ -8492,6 +8509,7 @@ utter	3
 utterance	2
 uttered	1
 utters	1
+v	11
 vacancy	1
 vailed	1
 vain	4
@@ -8692,6 +8710,7 @@ vttermost	1
 vulcan	1
 vulgar	2
 vv	1
+w	1
 waddled	1
 wag	2
 wage	1
@@ -9066,8 +9085,10 @@ wrote	2
 wrought	6
 wrung	1
 www	6
+x	2
 xxx	2
 xxxxx10x	2
+y	5
 yard	2
 yaughan	1
 yaw	1
@@ -9116,8 +9137,8 @@ ythee	4
 zip	5
 zone	1
 zounds	2
->>>>>the	2906
->>>>>and	2643
->>>>>to	2162
->>>>>of	1806
->>>>>you	1529
+>>the	2906
+>>and	2643
+>>i	2179
+>>to	2162
+>>of	1806

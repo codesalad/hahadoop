@@ -78,8 +78,8 @@ public class Salaries_batting extends Configured implements Tool {
 					int yearID = parts[0].isEmpty()? 0 : Integer.parseInt(parts[0]);
 					int salary = parts[4].isEmpty()? 0 : Integer.parseInt(parts[4]);
 					
-					// Filter by year 2001 and salary > 500,000
-					if (yearID == 2001 && salary > 500000)
+					// Filter by year 2001
+					if (yearID == 2001)
 						context.write(new Text(playerID), new Text("salary:"+salary));
 				}
 			}
@@ -97,18 +97,14 @@ public class Salaries_batting extends Configured implements Tool {
 				throws IOException, InterruptedException {
 			int HR = -1;
 			int salary = -1;
-			
-			// Parse values
 			for (Text value : values) {
 				String[] split = value.toString().split(":");
 				if (split[0].equals("HR")) {
 					HR = Integer.parseInt(split[1]);
 				} else if (split[0].equals("salary")) {
-					salary = Integer.parseInt(split[1]);
+					salary = Integer.parseInt(split[1]) > 500000 ? Integer.parseInt(split[1]) : -1;
 				}
 			}
-			
-			// If both properties are found, write to file
 			if (HR != -1 && salary != -1)
 				context.write(key, new Text(HR + "\t" + salary));
 		}

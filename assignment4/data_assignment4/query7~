@@ -53,4 +53,6 @@ proj_batting = FOREACH batting_fhr GENERATE playerID, HR;
 
 joined = JOIN proj_batting BY playerID, proj_sal BY playerID;
 
-dump joined;
+proj_joined = FOREACH joined GENERATE $0, $1, $3;
+
+store proj_joined into 'q7_results2';

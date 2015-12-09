@@ -16,8 +16,7 @@ public class UdfPercentage extends EvalFunc<String> {
 				if (input.get(1) == null) return null;
 				int part = (int) input.get(0);
 				int total = (int) input.get(1);
-				double percentage = ((double) part / total) * 100;
-				return new DecimalFormat("#0.00").format(percentage) + "%";
+				return Double.toString(((double)part / total) * 100) + "%";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

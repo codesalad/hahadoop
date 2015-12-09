@@ -1,15 +1,5 @@
-salaries = 	
-LOAD 'Salaries.csv' 
-USING PigStorage(',')
-AS 	
-(
-yearID:		int, 		-- Year
-teamID:		chararray, 	-- Team
-lgID:		chararray, 	-- League
-playerID:	chararray, 	-- Player ID code
-salary:		int		-- Salary
-);
-                    
+set mapreduce.io.sort.mb 5;
+
 batting = 	
 LOAD 'Batting.csv'
 USING PigStorage(',')
@@ -40,7 +30,9 @@ SF: 		int,		-- Sacrifice flies
 GIDP: 		int		-- Grounded into double plays
 );
 
-filtered = FILTER batting BY yearID == 1988;
-ordered = ORDER filtered BY H DESC;
-q4 = foreach ordered generate playerID, H;
-store q4 into 'q4_results';
+REGISTER udf_percentage.jar;
+proj = FOREACH batting GENERATE playerID, UdfPercentage(HR, G); --no package declaration
+ordered = ORDER proj BY $1 DESC;
+top10 = LIMIT ordered 10;
+dump top10;
+store top10 into 'q8_results'

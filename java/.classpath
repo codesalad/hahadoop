@@ -47,6 +47,6 @@
 	<classpathentry kind="lib" path="/home/cloudera/lib/mrunit-0.9.0-incubating-hadoop2.jar"/>
 	<classpathentry kind="lib" path="/home/cloudera/lib/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="/home/cloudera/lib/hamcrest-all-1.1.jar"/>
-    
+	<classpathentry kind="lib" path="/usr/lib/pig/pig.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

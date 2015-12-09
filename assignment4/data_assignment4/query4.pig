@@ -46,4 +46,5 @@ filtered = FILTER batting BY yearID == 1988;
 ordered = ORDER filtered BY H DESC;
 top = foreach ordered generate playerID, H;
 top10 = LIMIT top 10;
-store top10 into 'q4_results';
+--store top10 into 'q4_results';
+dump top10;

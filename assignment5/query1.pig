@@ -12,5 +12,5 @@ F = GROUP E BY Team;
 
 G = FOREACH F GENERATE group, AVG($1.$1);
 
-DUMP D;
+DUMP G;
 

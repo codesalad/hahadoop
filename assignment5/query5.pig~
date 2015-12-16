@@ -8,22 +8,21 @@ on_base_percentage, and slugging_percentage.
 set mapreduce.io.sort.mb 5;
 
 B = LOAD 'baseball/baseball' AS (name:chararray, team:chararray, position:bag{t:(p:chararray)}, bat:map[]);
-
 P = GROUP B BY name;
-
 FLT = FOREACH P GENERATE group AS name, FLATTEN(B.bat) AS Bat;
 
+-- Calculate AVG x 
 A = FOREACH FLT GENERATE name, (int)Bat#'games' AS games, (int)Bat#'strikeouts' AS strikeouts;
 BB = GROUP A ALL;
-
 AVGX = FOREACH BB generate (float) SUM(A.strikeouts) / SUM(A.games) as avgx;
 
-T = CROSS B, AVGX;
+Players_Averagex = CROSS B, AVGX;
 
+-- Use UDF
 register udf_pitchers.jar;
+Grouped = GROUP Players_Averagex BY $0;
+TT = FILTER Grouped BY UdfPitchers(Players_Averagex);
 
-TP = GROUP T BY $0;
+K = FOREACH TT GENERATE $0;
 
-TT = FILTER TP BY not UdfPitchers(T);
-
-dump TT;
+dump K;
